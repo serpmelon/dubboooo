@@ -12,4 +12,11 @@
     <artifactId>raw-client</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>tiger</groupId>
+            <artifactId>api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

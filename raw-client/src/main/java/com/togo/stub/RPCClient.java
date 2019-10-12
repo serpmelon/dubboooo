@@ -1,4 +1,4 @@
-package com.togo;
+package com.togo.stub;
 
 import java.io.BufferedReader;
 import java.io.IOException;
