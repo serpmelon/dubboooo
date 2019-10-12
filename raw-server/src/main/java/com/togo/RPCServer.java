@@ -53,4 +53,13 @@ public class RPCServer {
         }
 
     }
+
+    public static void main(String[] args) {
+
+        try {
+            start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
