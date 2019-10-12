@@ -12,6 +12,8 @@
         <module>provider</module>
         <module>consumer</module>
         <module>api</module>
+        <module>raw-server</module>
+        <module>raw-client</module>
     </modules>
 
 

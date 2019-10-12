@@ -8,7 +8,9 @@
         <outputRelativeToContentRoot value="true" />
         <module name="consumer" />
         <module name="api" />
+        <module name="rawserver" />
         <module name="provider" />
+        <module name="rawclient" />
       </profile>
     </annotationProcessing>
   </component>
