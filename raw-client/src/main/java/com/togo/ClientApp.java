@@ -2,6 +2,9 @@ package com.togo;
 
 import com.tiger.dubbo.api.DemoService;
 import com.togo.service.factory.ServiceFactory;
+import com.togo.stub.RPCClient;
+
+import java.io.IOException;
 
 /**
  * <p></p>
@@ -21,7 +24,14 @@ public class ClientApp {
 
     public static void main(String[] args) {
 
+        try {
+            RPCClient.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         DemoService service = ServiceFactory.createService("demo");
-        service.sayHi("haha");
+        System.out.println(service.sayHi("haha"));;
     }
 }

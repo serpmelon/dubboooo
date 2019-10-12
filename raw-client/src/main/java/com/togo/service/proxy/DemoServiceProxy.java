@@ -1,6 +1,9 @@
 package com.togo.service.proxy;
 
 import com.tiger.dubbo.api.DemoService;
+import com.togo.stub.RPCClient;
+
+import java.io.IOException;
 
 /**
  * <p></p>
@@ -18,7 +21,16 @@ import com.tiger.dubbo.api.DemoService;
  */
 public class DemoServiceProxy implements DemoService {
 
-    public String sayHi(String name) {
+    public String sayHi(String name){
+
+        String msg = "com.tiger.dubbo.api.DemoService-sayHi-java.lang.String-" + name;
+        try {
+            return (String) RPCClient.sendMsg(msg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

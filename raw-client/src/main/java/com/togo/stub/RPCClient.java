@@ -25,6 +25,9 @@ import java.net.Socket;
  */
 public class RPCClient {
 
+    private static PrintStream out;
+    private static BufferedReader input;
+
     public static void start() throws IOException, InterruptedException {
 
         String address = "127.0.0.1";
@@ -34,27 +37,24 @@ public class RPCClient {
         Socket socket = new Socket(address, port);
 
         //读取服务器端数据
-        BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         //向服务器端发送数据
-        PrintStream out = new PrintStream(socket.getOutputStream());
-        System.out.print("请输入: \t");
-        String str = new BufferedReader(new InputStreamReader(System.in)).readLine();
-        out.println(str);
+        out = new PrintStream(socket.getOutputStream());
+        System.out.print("客户端启动: \t\n");
+
+
+    }
+
+    public static Object sendMsg(String msg) throws IOException, InterruptedException {
+
+        out.println(msg);
 
         String ret = input.readLine();
         System.out.println("服务器端返回过来的是: " + ret);
-        // 如接收到 "OK" 则断开连接
-        if ("OK".equals(ret)) {
-            System.out.println("客户端将关闭连接");
-            Thread.sleep(500);
-        }
 
         out.close();
         input.close();
-    }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-
-        start();
+        return ret;
     }
 }

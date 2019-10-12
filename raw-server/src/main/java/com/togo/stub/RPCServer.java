@@ -1,9 +1,11 @@
-package com.togo;
+package com.togo.stub;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -24,7 +26,7 @@ import java.net.Socket;
  */
 public class RPCServer {
 
-    public static void start() throws IOException {
+    public static void start() throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
         String address = "127.0.0.1";
         int port = 9024;
@@ -41,12 +43,10 @@ public class RPCServer {
             // 处理客户端数据
             System.out.println("客户端发过来的内容:" + clientInputStr);
 
+            String result = (String) handleMsg(clientInputStr);
             // 向客户端回复信息
             PrintStream out = new PrintStream(socket.getOutputStream());
-            System.out.print("请输入:\t");
-            // 发送键盘输入的一行
-            String s = new BufferedReader(new InputStreamReader(System.in)).readLine();
-            out.println(s);
+            out.println(result);
 
             out.close();
             input.close();
@@ -54,12 +54,18 @@ public class RPCServer {
 
     }
 
-    public static void main(String[] args) {
+    public static Object handleMsg(String msg)
+            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
+            InstantiationException, InvocationTargetException {
 
-        try {
-            start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String[] msgArr = msg.split("-");
+        String klassName = msgArr[0];
+        if ("com.tiger.dubbo.api.DemoService".equals(klassName))
+            klassName = "com.togo.service.DemoServiceImpl";
+        Class klass = Class.forName(klassName);
+        Class param = Class.forName(msgArr[2]);
+        Method method = klass.getMethod(msgArr[1], param);
+
+        return method.invoke(klass.newInstance(), msgArr[3]);
     }
 }
