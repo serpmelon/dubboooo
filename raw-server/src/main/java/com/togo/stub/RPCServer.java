@@ -186,7 +186,7 @@ public class RPCServer {
         }
     }
 
-    public static Object handleRequest(String msg)
+    private static Object handleRequest(String msg)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
             InstantiationException, InvocationTargetException {
 

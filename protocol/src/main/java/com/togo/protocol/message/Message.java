@@ -16,14 +16,25 @@ package com.togo.protocol.message;
  */
 public class Message {
 
+    /**
+     * 服务类名称
+     */
     private String klassName;
-
+    /**
+     * 服务别名
+     */
     private String alias;
-
+    /**
+     * 方法名称
+     */
     private String methodName;
-
+    /**
+     * 方法参数类型
+     */
     private Class<?>[] parameterKlassNameArrays;
-
+    /**
+     * 方法参数值
+     */
     private Object[] parameterArrays;
 
     public String getKlassName() {
