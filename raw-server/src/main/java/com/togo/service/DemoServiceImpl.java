@@ -1,6 +1,7 @@
 package com.togo.service;
 
 import com.tiger.dubbo.api.DemoService;
+import com.togo.annotation.Service;
 
 /**
  * <p></p>
@@ -16,7 +17,9 @@ import com.tiger.dubbo.api.DemoService;
  * @date Created in 2019年10月12日 13:44
  * @since 1.0
  */
+@Service
 public class DemoServiceImpl implements DemoService {
+
     public String sayHi(String name) {
         return "hi " + name;
     }

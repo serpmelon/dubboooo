@@ -21,7 +21,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class ServerApp {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         try {
             RPCServer.start();

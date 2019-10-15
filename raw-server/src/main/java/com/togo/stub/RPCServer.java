@@ -56,6 +56,11 @@ public class RPCServer {
         }
     }
 
+    public static void init() {
+
+
+    }
+
     public static Object handleMsg(String msg)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
             InstantiationException, InvocationTargetException {
