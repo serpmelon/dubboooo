@@ -12,6 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
+import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.Map;
 
@@ -71,36 +72,73 @@ public class RPCServer {
      * @author : taiyn
      * date : 2019-10-15 15:44
      * @param : [root]
-     * @return java.util.Map<com.togo.annotation.scan.Key,java.lang.Class>
+     * @return java.util.Map<com.togo.annotation.scan.Key, java.lang.Class>
      * </pre>
      */
     private static Map<Key, Class> scan(String root) {
 
         File file = new File(root);
-        allFiles(file);
+        allFiles(file, root);
 
         return null;
     }
 
-    private static void allFiles(File file) {
+    /**
+     * <pre>
+     * desc : 扫描所有的类路径，把它们加入到上线文
+     * @author : taiyn
+     * date : 2019-10-15 16:37
+     * @param : [file, root]
+     * @return void
+     * </pre>
+     */
+    private static void allFiles(File file, String root) {
 
         if (file.isDirectory()) {
 
             File[] files = file.listFiles();
+            if (files == null)
+                return;
+
             for (File f : files) {
 
                 if (f.isDirectory())
-                    allFiles(f);
-                else
-                    Context.INSTANCE.addFile(f.getAbsolutePath());
+                    allFiles(f, root);
+                else {
+                    String path = f.getAbsolutePath();
 
+                    Context.INSTANCE.addFile(handlePathToClass(path, root));
+                }
             }
         }
     }
 
+    /**
+     * <pre>
+     * desc : 处理类路径
+     * @author : taiyn
+     * date : 2019-10-15 16:38
+     * @param : [path, root]
+     * @return java.lang.String
+     * </pre>
+     */
+    private static String handlePathToClass(String path, String root) {
+
+        path = path.substring(root.length());
+        path = path.replace('/', '.');
+        return path.substring(0, path.length() - ".class".length());
+    }
+
+//    private static void loadImpl() {
+//
+//        for(String path : )
+//    }
+
     public static void main(String[] args) {
         try {
             init();
+            System.out.println(Context.INSTANCE.getAllFiles());
+            System.out.println();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
