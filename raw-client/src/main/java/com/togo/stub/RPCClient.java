@@ -28,7 +28,16 @@ public class RPCClient {
     private static PrintStream out;
     private static BufferedReader input;
 
-    public static void start() throws IOException, InterruptedException {
+    static {
+
+        try {
+            start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void start() throws Exception {
 
         String address = "127.0.0.1";
         int port = 9024;
@@ -41,8 +50,6 @@ public class RPCClient {
         //向服务器端发送数据
         out = new PrintStream(socket.getOutputStream());
         System.out.print("客户端启动: \t\n");
-
-
     }
 
     public static Object sendMsg(String msg) throws IOException, InterruptedException {

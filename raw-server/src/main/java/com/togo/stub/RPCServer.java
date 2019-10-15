@@ -1,5 +1,8 @@
 package com.togo.stub;
 
+import com.alibaba.fastjson.JSONObject;
+import com.togo.protocol.message.Message;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,7 +29,7 @@ import java.net.Socket;
  */
 public class RPCServer {
 
-    public static void start() throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static void start() throws Exception {
 
         String address = "127.0.0.1";
         int port = 9024;
@@ -51,21 +54,21 @@ public class RPCServer {
             out.close();
             input.close();
         }
-
     }
 
     public static Object handleMsg(String msg)
             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
             InstantiationException, InvocationTargetException {
 
-        String[] msgArr = msg.split("-");
-        String klassName = msgArr[0];
+        Message message = JSONObject.parseObject(msg, Message.class);
+
+        String klassName = message.getKlassName();
         if ("com.tiger.dubbo.api.DemoService".equals(klassName))
             klassName = "com.togo.service.DemoServiceImpl";
         Class klass = Class.forName(klassName);
-        Class param = Class.forName(msgArr[2]);
-        Method method = klass.getMethod(msgArr[1], param);
+        Class[] param = message.getParameterKlassNameArrays();
+        Method method = klass.getMethod(message.getMethodName(), param);
 
-        return method.invoke(klass.newInstance(), msgArr[3]);
+        return method.invoke(klass.newInstance(), message.getParameterArrays());
     }
 }

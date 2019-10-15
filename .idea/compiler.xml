@@ -6,11 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="consumer" />
+        <module name="rawclient" />
         <module name="api" />
         <module name="rawserver" />
         <module name="provider" />
-        <module name="rawclient" />
+        <module name="protocol" />
+        <module name="consumer" />
       </profile>
     </annotationProcessing>
   </component>

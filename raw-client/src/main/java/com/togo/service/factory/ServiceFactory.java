@@ -2,6 +2,9 @@ package com.togo.service.factory;
 
 import com.tiger.dubbo.api.DemoService;
 import com.togo.service.proxy.DemoServiceProxy;
+import com.togo.service.proxy.RemoteProxy;
+
+import java.lang.reflect.Proxy;
 
 /**
  * <p></p>
@@ -19,11 +22,15 @@ import com.togo.service.proxy.DemoServiceProxy;
  */
 public class ServiceFactory {
 
+    public static <T> T createService(Class<T> klass) {
 
-    public static DemoService createService(String name) {
+        if (klass == null)
+            return null;
 
-        if ("demo".equals(name))
-            return new DemoServiceProxy();
-        return new DemoServiceProxy();
+        RemoteProxy<T> rp = new RemoteProxy<T>(klass);
+        Object subject = Proxy.newProxyInstance(rp.getClass().getClassLoader(),
+                new Class[]{klass}, rp);
+
+        return (T) subject;
     }
 }
