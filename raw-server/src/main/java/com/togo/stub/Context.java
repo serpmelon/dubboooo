@@ -51,6 +51,11 @@ public enum Context {
         allServiceImpls.put(key, path);
     }
 
+    public String getServiceImpl(Key key) {
+
+        return allServiceImpls.get(key);
+    }
+
     public List<String> getAllFiles() {
         return allFiles;
     }

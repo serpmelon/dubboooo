@@ -2,8 +2,6 @@ package com.togo;
 
 import com.togo.stub.RPCServer;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * <p></p>
@@ -24,7 +22,7 @@ public class ServerApp {
     public static void main(String[] args) {
 
         try {
-            RPCServer.start();
+            RPCServer.init();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -22,6 +22,11 @@ public class Key {
     private String name;
     private String[] alias;
 
+    public Key(String name) {
+
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -59,7 +64,7 @@ public class Key {
         return alias;
     }
 
-    public void setAlias(String[] alias) {
+    public void setAlias(String... alias) {
         this.alias = alias;
     }
 }
