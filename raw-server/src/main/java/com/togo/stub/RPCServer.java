@@ -1,17 +1,19 @@
 package com.togo.stub;
 
 import com.alibaba.fastjson.JSONObject;
+import com.togo.annotation.scan.Key;
 import com.togo.protocol.message.Message;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p></p>
@@ -56,9 +58,52 @@ public class RPCServer {
         }
     }
 
-    public static void init() {
+    public static void init() throws UnsupportedEncodingException {
 
+        String root = URLDecoder.decode(RPCServer.class.getResource("/").getPath(), String.valueOf(Charset.defaultCharset()));
+        System.out.println(root);
+        scan(root);
+    }
 
+    /**
+     * <pre>
+     * desc : 扫描全部类
+     * @author : taiyn
+     * date : 2019-10-15 15:44
+     * @param : [root]
+     * @return java.util.Map<com.togo.annotation.scan.Key,java.lang.Class>
+     * </pre>
+     */
+    private static Map<Key, Class> scan(String root) {
+
+        File file = new File(root);
+        allFiles(file);
+
+        return null;
+    }
+
+    private static void allFiles(File file) {
+
+        if (file.isDirectory()) {
+
+            File[] files = file.listFiles();
+            for (File f : files) {
+
+                if (f.isDirectory())
+                    allFiles(f);
+                else
+                    Context.INSTANCE.addFile(f.getAbsolutePath());
+
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            init();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Object handleMsg(String msg)
