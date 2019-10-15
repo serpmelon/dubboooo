@@ -144,7 +144,7 @@ public class RPCServer {
 
     /**
      * <pre>
-     * desc : TODO
+     * desc : 加载实现类
      * @author : taiyn
      * date : 2019-10-15 16:44
      * @param : []
@@ -195,6 +195,7 @@ public class RPCServer {
         String klassName = message.getKlassName();
 
         Key key = new Key(klassName);
+        key.setAlias(message.getAlias());
         klassName = Context.INSTANCE.getServiceImpl(key);
         Class klass = Class.forName(klassName);
         Class[] param = message.getParameterKlassNameArrays();

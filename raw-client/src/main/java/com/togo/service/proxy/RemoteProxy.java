@@ -27,10 +27,12 @@ import java.rmi.Remote;
 public class RemoteProxy<T> implements InvocationHandler {
 
     private Class<T> klass;
+    private String alias;
 
-    public RemoteProxy(Class<T> klass) {
+    public RemoteProxy(Class<T> klass, String alias) {
 
         this.klass = klass;
+        this.alias = alias;
     }
 
 
@@ -38,6 +40,7 @@ public class RemoteProxy<T> implements InvocationHandler {
 
         Message message = new Message();
         message.setKlassName(klass.getName());
+        message.setAlias(alias);
         message.setMethodName(method.getName());
         message.setParameterKlassNameArrays(method.getParameterTypes());
         message.setParameterArrays(args);

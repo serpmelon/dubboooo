@@ -18,6 +18,8 @@ public class Message {
 
     private String klassName;
 
+    private String alias;
+
     private String methodName;
 
     private Class<?>[] parameterKlassNameArrays;
@@ -54,5 +56,13 @@ public class Message {
 
     public void setParameterArrays(Object[] parameterArrays) {
         this.parameterArrays = parameterArrays;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }

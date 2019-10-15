@@ -22,12 +22,12 @@ import java.lang.reflect.Proxy;
  */
 public class ServiceFactory {
 
-    public static <T> T createService(Class<T> klass) {
+    public static <T> T createService(Class<T> klass, String alias) {
 
         if (klass == null)
             return null;
 
-        RemoteProxy<T> rp = new RemoteProxy<T>(klass);
+        RemoteProxy<T> rp = new RemoteProxy<T>(klass, alias);
         Object subject = Proxy.newProxyInstance(rp.getClass().getClassLoader(),
                 new Class[]{klass}, rp);
 
