@@ -180,15 +180,12 @@ public class RPCServer {
         try {
             init();
             System.out.println(Context.INSTANCE.getAllFiles());
-            System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static Object handleRequest(String msg)
-            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
-            InstantiationException, InvocationTargetException {
+    private static Object handleRequest(String msg) throws Exception {
 
         Message message = JSONObject.parseObject(msg, Message.class);
 

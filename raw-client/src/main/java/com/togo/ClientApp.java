@@ -23,6 +23,6 @@ public class ClientApp {
     public static void main(String[] args) {
 
         DemoService service = ServiceFactory.createService(DemoService.class, "multi");
-        System.out.println(service.sayHi("haha"));;
+        System.out.println(service.sayHi("haha"));
     }
 }
