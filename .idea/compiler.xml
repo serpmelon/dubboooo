@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="rawclient" />
         <module name="api" />
+        <module name="common" />
         <module name="rawserver" />
         <module name="provider" />
         <module name="protocol" />
