@@ -1,4 +1,4 @@
-package com.togo.protocol.message;
+package com.togo.message;
 
 /**
  * <p></p>

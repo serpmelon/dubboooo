@@ -1,4 +1,4 @@
-package com.togo.stub;
+package com.togo.provider.stub;
 
 import com.togo.annotation.scan.Key;
 import com.togo.exception.MultiImplServiceException;

@@ -1,22 +1,21 @@
-package com.togo.stub;
+package com.togo.provider.stub;
 
 import com.alibaba.fastjson.JSONObject;
 import com.togo.annotation.Service;
 import com.togo.annotation.scan.Key;
-import com.togo.protocol.message.Message;
+import com.togo.message.Message;
 import com.togo.util.StringUtil;
 
-import javax.sound.midi.Soundbank;
-import java.io.*;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
-import java.util.Map;
 
 /**
  * <p></p>
@@ -85,7 +84,7 @@ public class RPCServer {
      * @author : taiyn
      * date : 2019-10-15 15:44
      * @param : [root]
-     * @return java.util.Map<com.togo.annotation.scan.Key, java.lang.Class>
+     * @return java.util.Map<com.com.togo.annotation.scan.Key, java.lang.Class>
      * </pre>
      */
     private static void scan(String root) {

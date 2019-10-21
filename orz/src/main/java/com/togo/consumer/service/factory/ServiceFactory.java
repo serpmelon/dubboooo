@@ -1,6 +1,6 @@
-package com.togo.service.factory;
+package com.togo.consumer.service.factory;
 
-import com.togo.service.proxy.RemoteProxy;
+import com.togo.consumer.service.proxy.RemoteProxy;
 
 import java.lang.reflect.Proxy;
 

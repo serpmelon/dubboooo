@@ -1,7 +1,7 @@
 package com.togo;
 
 import com.tiger.dubbo.api.DemoService;
-import com.togo.service.factory.ServiceFactory;
+import com.togo.consumer.service.factory.ServiceFactory;
 
 
 /**

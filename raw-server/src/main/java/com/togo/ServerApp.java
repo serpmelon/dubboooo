@@ -1,7 +1,7 @@
 package com.togo;
 
-import com.togo.stub.RPCServer;
 
+import com.togo.provider.stub.RPCServer;
 
 /**
  * <p></p>

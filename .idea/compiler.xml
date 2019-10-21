@@ -6,14 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="rawclient" />
+        <module name="orz" />
         <module name="api" />
-        <module name="common" />
-        <module name="rawserver" />
         <module name="provider" />
-        <module name="protocol" />
+        <module name="rawserver" />
+        <module name="rawclient" />
         <module name="consumer" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="1.8" />
+      <module name="protocol" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -14,8 +14,7 @@
         <module>api</module>
         <module>raw-server</module>
         <module>raw-client</module>
-        <module>protocol</module>
-        <module>common</module>
+        <module>orz</module>
     </modules>
 
     <dependencies>
@@ -27,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>tiger</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>orz</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

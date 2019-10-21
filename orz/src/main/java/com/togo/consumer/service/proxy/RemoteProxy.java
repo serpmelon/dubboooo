@@ -1,14 +1,11 @@
-package com.togo.service.proxy;
+package com.togo.consumer.service.proxy;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tiger.dubbo.api.DemoService;
-import com.togo.protocol.message.Message;
-import com.togo.stub.RPCClient;
+import com.togo.consumer.stub.RPCClient;
+import com.togo.message.Message;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.rmi.Remote;
 
 /**
  * <p></p>
