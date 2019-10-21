@@ -1,13 +1,11 @@
 package com.togo.provider.stub;
 
 import com.alibaba.fastjson.JSONObject;
-import com.togo.annotation.Service;
 import com.togo.annotation.scan.Key;
 import com.togo.message.Message;
-import com.togo.util.StringUtil;
+import com.togo.util.ContextUtil;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
@@ -33,7 +31,7 @@ import java.nio.charset.Charset;
  */
 public class RPCServer {
 
-    public static void start() throws Exception {
+    private static void start() throws Exception {
 
         String address = "127.0.0.1";
         int port = 9024;
@@ -74,105 +72,8 @@ public class RPCServer {
 
         String root = URLDecoder.decode(RPCServer.class.getResource("/").getPath(), String.valueOf(Charset.defaultCharset()));
         System.out.println("start init");
-        scan(root);
+        ContextUtil.scanAndLoad(root);
         start();
-    }
-
-    /**
-     * <pre>
-     * desc : 扫描全部类
-     * @author : taiyn
-     * date : 2019-10-15 15:44
-     * @param : [root]
-     * @return java.util.Map<com.com.togo.annotation.scan.Key, java.lang.Class>
-     * </pre>
-     */
-    private static void scan(String root) {
-
-        System.out.println("start scan");
-        File file = new File(root);
-        allFiles(file, root);
-        loadImpl();
-    }
-
-    /**
-     * <pre>
-     * desc : 扫描所有的类路径，把它们加入到上线文
-     * @author : taiyn
-     * date : 2019-10-15 16:37
-     * @param : [file, root]
-     * @return void
-     * </pre>
-     */
-    private static void allFiles(File file, String root) {
-
-        if (file.isDirectory()) {
-
-            File[] files = file.listFiles();
-            if (files == null)
-                return;
-
-            for (File f : files) {
-
-                if (f.isDirectory())
-                    allFiles(f, root);
-                else {
-                    String path = f.getAbsolutePath();
-
-                    Context.INSTANCE.addFile(handlePathToClass(path, root));
-                }
-            }
-        }
-    }
-
-    /**
-     * <pre>
-     * desc : 处理类路径
-     * @author : taiyn
-     * date : 2019-10-15 16:38
-     * @param : [path, root]
-     * @return java.lang.String
-     * </pre>
-     */
-    private static String handlePathToClass(String path, String root) {
-
-        path = path.substring(root.length());
-        path = path.replace('/', '.');
-        return path.substring(0, path.length() - ".class".length());
-    }
-
-    /**
-     * <pre>
-     * desc : 加载实现类
-     * @author : taiyn
-     * date : 2019-10-15 16:44
-     * @param : []
-     * @return void
-     * </pre>
-     */
-    private static void loadImpl() {
-
-        for (String path : Context.INSTANCE.getAllFiles()) {
-
-            try {
-                Class klass = Class.forName(path);
-                if (klass.isAnnotationPresent(Service.class)) {
-                    Class[] interfaces = klass.getInterfaces();
-                    for (Class c : interfaces) {
-
-                        Key key = new Key(c.getName());
-                        Service service = (Service) klass.getDeclaredAnnotation(Service.class);
-                        if (StringUtil.isNotEmpty(service.name())) {
-
-                            key.setAlias(service.name());
-                        }
-                        Context.INSTANCE.addServiceImpl(key, path);
-                    }
-                }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public static void main(String[] args) {
