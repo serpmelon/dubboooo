@@ -20,6 +20,7 @@ import java.lang.reflect.Proxy;
  */
 public class ServiceFactory {
 
+    @SuppressWarnings("unchecked")
     public static <T> T createService(Class<T> klass, String alias) {
 
         if (klass == null)

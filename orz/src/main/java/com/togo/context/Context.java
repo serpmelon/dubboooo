@@ -60,18 +60,6 @@ public enum Context {
         return allFiles;
     }
 
-    public void setAllFiles(List<String> allFiles) {
-        this.allFiles = allFiles;
-    }
-
-    public Map<Key, String> getAllServiceImpls() {
-        return allServiceImpls;
-    }
-
-    public void setAllServiceImpls(Map<Key, String> allServiceImpls) {
-        this.allServiceImpls = allServiceImpls;
-    }
-
     @Override
     public String toString() {
         return "Context{" +

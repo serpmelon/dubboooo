@@ -2,7 +2,8 @@ package com.togo.util;
 
 import com.togo.annotation.Service;
 import com.togo.annotation.scan.Key;
-import com.togo.provider.stub.Context;
+import com.togo.context.Context;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 
@@ -20,6 +21,7 @@ import java.io.File;
  * @date Created in 2019年10月21日 20:40
  * @since 1.0
  */
+@Slf4j
 public class ContextUtil {
 
     /**
@@ -33,7 +35,7 @@ public class ContextUtil {
      */
     public static void scanAndLoad(String root) {
 
-        System.out.println("start scanAndLoad");
+        log.info("start scanAndLoad");
         File file = new File(root);
         scan(file, root);
         loadImpl();
@@ -63,6 +65,7 @@ public class ContextUtil {
                 else {
                     String path = f.getAbsolutePath();
 
+                    log.info("scan and add path : [{}]", path);
                     Context.INSTANCE.addFile(handlePathToClass(path, root));
                 }
             }
@@ -84,6 +87,7 @@ public class ContextUtil {
         path = path.replace('/', '.');
         return path.substring(0, path.length() - ".class".length());
     }
+
 
     /**
      * <pre>

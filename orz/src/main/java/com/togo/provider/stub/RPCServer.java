@@ -2,8 +2,11 @@ package com.togo.provider.stub;
 
 import com.alibaba.fastjson.JSONObject;
 import com.togo.annotation.scan.Key;
+import com.togo.context.Context;
 import com.togo.message.Message;
+import com.togo.register.Register;
 import com.togo.util.ContextUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -29,13 +32,17 @@ import java.nio.charset.Charset;
  * @date Created in 2019年10月12日 12:53
  * @since 1.0
  */
+@Slf4j
 public class RPCServer {
 
     private static void start() throws Exception {
 
         String address = "127.0.0.1";
         int port = 9024;
-        System.out.println("server start address : " + address + " port: " + port);
+
+        log.info("server start address : [{}], port: [{}]", address, port);
+
+        Register.INSTANCE.signIn();
 
         ServerSocket serverSocket = new ServerSocket();
         serverSocket.bind(new InetSocketAddress(address, port));
@@ -70,8 +77,8 @@ public class RPCServer {
      */
     public static void init() throws Exception {
 
-        String root = URLDecoder.decode(RPCServer.class.getResource("/").getPath(), String.valueOf(Charset.defaultCharset()));
-        System.out.println("start init");
+        String root = URLDecoder.decode(RPCServer.class.getResource("/com").getPath(), String.valueOf(Charset.defaultCharset()));
+        log.info("start init");
         ContextUtil.scanAndLoad(root);
         start();
     }
