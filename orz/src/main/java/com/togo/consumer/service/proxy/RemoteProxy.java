@@ -32,7 +32,6 @@ public class RemoteProxy<T> implements InvocationHandler {
         this.alias = alias;
     }
 
-
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
         Message message = new Message();
