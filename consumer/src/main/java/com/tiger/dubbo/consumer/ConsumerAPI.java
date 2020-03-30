@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.tiger.dubbo.api.DemoService;
+import org.apache.dubbo.rpc.RpcContext;
 
 /**
  * <p></p>
@@ -34,8 +35,11 @@ public class ConsumerAPI {
         referenceConfig.setApplication(applicationConfig);
         referenceConfig.setRegistry(registryConfig);
 
+        RpcContext.getContext().setAttachment("tyn", "qwer");
         DemoService service = referenceConfig.get();
         System.out.println(service.sayHi("aaaa"));
+
+        System.out.println(RpcContext.getContext().get("tyn"));
 
     }
 }
