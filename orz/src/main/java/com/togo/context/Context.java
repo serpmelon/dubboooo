@@ -3,6 +3,7 @@ package com.togo.context;
 import com.togo.annotation.scan.Key;
 import com.togo.exception.MultiImplServiceException;
 import com.togo.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import java.util.Map;
  * @date Created in 2019年10月15日 15:20
  * @since 1.0
  */
+@Slf4j
 public enum Context {
 
     INSTANCE;

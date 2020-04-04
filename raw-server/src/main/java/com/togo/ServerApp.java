@@ -1,7 +1,12 @@
 package com.togo;
 
 
+import com.togo.context.Context;
 import com.togo.provider.stub.RPCServer;
+import com.togo.util.ContextUtil;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * <p></p>
@@ -19,7 +24,7 @@ import com.togo.provider.stub.RPCServer;
  */
 public class ServerApp {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MalformedURLException {
 
         try {
             RPCServer.init();

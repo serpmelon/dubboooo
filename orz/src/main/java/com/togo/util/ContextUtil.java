@@ -1,6 +1,6 @@
 package com.togo.util;
 
-import com.togo.annotation.Service;
+import com.togo.annotation.Orz;
 import com.togo.annotation.scan.Key;
 import com.togo.context.Context;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +39,7 @@ public class ContextUtil {
         File file = new File(root);
         scan(file, root);
         loadImpl();
+        System.out.println(Context.INSTANCE.getAllFiles());
     }
 
     /**
@@ -66,7 +67,7 @@ public class ContextUtil {
                     String path = f.getAbsolutePath();
 
                     log.info("scan and add path : [{}]", path);
-                    Context.INSTANCE.addFile(handlePathToClass(path, root));
+                    handlePathToClass(path, root);
                 }
             }
         }
@@ -81,11 +82,14 @@ public class ContextUtil {
      * @return java.lang.String
      * </pre>
      */
-    private static String handlePathToClass(String path, String root) {
+    private static void handlePathToClass(String path, String root) {
 
+        if (!path.endsWith(".class"))
+            return;
         path = path.substring(root.length());
         path = path.replace('/', '.');
-        return path.substring(0, path.length() - ".class".length());
+
+        Context.INSTANCE.addFile(path.substring(0, path.length() - ".class".length()));
     }
 
 
@@ -103,16 +107,16 @@ public class ContextUtil {
         for (String path : Context.INSTANCE.getAllFiles()) {
 
             try {
-                Class klass = Class.forName(path);
-                if (klass.isAnnotationPresent(Service.class)) {
-                    Class[] interfaces = klass.getInterfaces();
-                    for (Class c : interfaces) {
+                Class<?> klass = Class.forName(path);
+                if (klass.isAnnotationPresent(Orz.class)) {
+                    Class<?>[] interfaces = klass.getInterfaces();
+                    for (Class<?> c : interfaces) {
 
                         Key key = new Key(c.getName());
-                        Service service = (Service) klass.getDeclaredAnnotation(Service.class);
-                        if (StringUtil.isNotEmpty(service.name())) {
+                        Orz orz = klass.getDeclaredAnnotation(Orz.class);
+                        if (StringUtil.isNotEmpty(orz.name())) {
 
-                            key.setAlias(service.name());
+                            key.setAlias(orz.name());
                         }
                         Context.INSTANCE.addServiceImpl(key, path);
                     }

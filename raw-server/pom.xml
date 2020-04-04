@@ -6,6 +6,7 @@
         <artifactId>dubboooo</artifactId>
         <groupId>tiger</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +16,10 @@
         <dependency>
             <groupId>tiger</groupId>
             <artifactId>api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>tiger</groupId>
+            <artifactId>orz</artifactId>
         </dependency>
 
 <!--        <dependency>-->
@@ -26,7 +30,6 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
         </dependency>
     </dependencies>
 

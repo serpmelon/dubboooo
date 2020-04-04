@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <p></p>
+ * <p>orz 服务标识</p>
  * <p>
  * <PRE>
  * <BR>    修改记录
@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Service {
+public @interface Orz {
 
     String name() default "";
 }

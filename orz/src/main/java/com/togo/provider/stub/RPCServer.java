@@ -42,7 +42,7 @@ public class RPCServer {
 
         log.info("server start address : [{}], port: [{}]", address, port);
 
-        Register.INSTANCE.signIn();
+//        Register.INSTANCE.signIn();
 
         ServerSocket serverSocket = new ServerSocket();
         serverSocket.bind(new InetSocketAddress(address, port));
@@ -77,19 +77,11 @@ public class RPCServer {
      */
     public static void init() throws Exception {
 
-        String root = URLDecoder.decode(RPCServer.class.getResource("/com").getPath(), String.valueOf(Charset.defaultCharset()));
+        String path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        String root = path;//URLDecoder.decode(, String.valueOf(Charset.defaultCharset()));
         log.info("start init");
         ContextUtil.scanAndLoad(root);
         start();
-    }
-
-    public static void main(String[] args) {
-        try {
-            init();
-            System.out.println(Context.INSTANCE.getAllFiles());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private static Object handleRequest(String msg) throws Exception {

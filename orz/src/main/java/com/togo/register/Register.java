@@ -9,24 +9,40 @@ import java.io.IOException;
  * @Description 注册中心
  * @Date 9:58 下午 2020/3/23
  **/
-public enum Register {
+public class Register {
 
-    INSTANCE;
-
-    private String root = "orz";
+    private String root = "/orz";
     private ZooKeeper zooKeeper;
     private OrzRegisterWatcher watcher;
-    private String host = "127.0.0.1:2181";
+    private String zkAddress = "127.0.0.1:2181";
     private int timeout;
 
-    Register() {
+    private String host;
+    private int port;
+
+    private static Register register;
+
+    private Register(String host, int port) {
+        this.host = host;
+        this.port = port;
+
         watcher = new OrzRegisterWatcher();
         timeout = 1000;
         try {
-            zooKeeper = new ZooKeeper(host, timeout, watcher);
+            zooKeeper = new ZooKeeper(zkAddress, timeout, watcher);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // TODO taiyn 2020/3/30 重写单例模式
+    public static Register instance(String host, int port) {
+
+        if (register != null)
+            return register;
+
+        register = new Register(host, port);
+        return register;
     }
 
     public void signIn() {
@@ -36,5 +52,4 @@ public enum Register {
     public void scan() {
 
     }
-
 }

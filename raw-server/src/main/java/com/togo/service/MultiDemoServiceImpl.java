@@ -1,7 +1,7 @@
 package com.togo.service;
 
 import com.tiger.dubbo.api.DemoService;
-import com.togo.annotation.Service;
+import com.togo.annotation.Orz;
 
 /**
  * <p></p>
@@ -17,7 +17,7 @@ import com.togo.annotation.Service;
  * @date Created in 2019年10月15日 17:23
  * @since 1.0
  */
-@Service(name = "multi")
+@Orz(name = "multi")
 public class MultiDemoServiceImpl implements DemoService {
 
     @Override
