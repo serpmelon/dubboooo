@@ -26,7 +26,6 @@ public class ServerApp {
     public static void main(String[] args) {
 
         try {
-            log.info("init");
             RPCServer.init();
         } catch (Exception e) {
             e.printStackTrace();

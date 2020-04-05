@@ -21,20 +21,19 @@ public final class ConfigUtil {
     private ConfigUtil() {
     }
 
-    public ConfigUtil instance() {
+    public static ConfigUtil instance() {
 
         return configUtil;
     }
 
     /**
+     * @return void
      * @Author taiyn
      * @Description 初始化配置
-     *
      * @Date 5:40 下午 2020/4/5
      * @Param []
-     * @return void
      **/
-    public void initConfig() {
+    public void init() {
 
         properties = new Properties();
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties");
@@ -49,12 +48,11 @@ public final class ConfigUtil {
     }
 
     /**
+     * @return java.lang.String
      * @Author taiyn
      * @Description 读取配置信息
-     *
      * @Date 5:40 下午 2020/4/5
      * @Param [key]
-     * @return java.lang.String
      **/
     public String read(String key) {
 
@@ -66,5 +64,11 @@ public final class ConfigUtil {
         log.info(properties.getProperty(key));
 
         return properties.getProperty(key);
+    }
+
+    public int readInt(String key) {
+
+        String value = read(key);
+        return Integer.parseInt(value);
     }
 }

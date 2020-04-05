@@ -5,6 +5,7 @@ import com.togo.annotation.scan.Key;
 import com.togo.context.Context;
 import com.togo.message.Message;
 import com.togo.register.Register;
+import com.togo.util.ConfigUtil;
 import com.togo.util.ContextUtil;
 import com.togo.util.TwoTuples;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +17,6 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
 
 /**
  * <p></p>
@@ -78,6 +77,8 @@ public class RPCServer {
      */
     public static void init() throws Exception {
 
+        ConfigUtil.instance().init();
+        Register.instance().init();
         log.info(classPath());
         TwoTuples<String, String> twoTuples = ContextUtil.findRoot(classPath());
         ContextUtil.scanAndLoad(twoTuples);
@@ -86,7 +87,6 @@ public class RPCServer {
 
     private static String classPath() {
 
-        String s = Thread.currentThread().getStackTrace()[3].getClassName();
         return Thread.currentThread().getStackTrace()[3].getClassName();
     }
 

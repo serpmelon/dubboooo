@@ -1,5 +1,6 @@
 package com.togo.register;
 
+import com.togo.util.ConfigUtil;
 import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
@@ -22,10 +23,24 @@ public class Register {
 
     private static Register register;
 
-    private Register(String host, int port) {
-        this.host = host;
-        this.port = port;
+    private Register() {
+    }
 
+    // TODO taiyn 2020/3/30 重写单例模式
+    public static Register instance() {
+
+        if (register != null)
+            return register;
+
+        register = new Register();
+        return register;
+    }
+
+    public void init() {
+
+        ConfigUtil configUtil = ConfigUtil.instance();
+        host = configUtil.read("host");
+        port = configUtil.readInt("port");
         watcher = new OrzRegisterWatcher();
         timeout = 1000;
         try {
@@ -33,16 +48,6 @@ public class Register {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    // TODO taiyn 2020/3/30 重写单例模式
-    public static Register instance(String host, int port) {
-
-        if (register != null)
-            return register;
-
-        register = new Register(host, port);
-        return register;
     }
 
     public void signIn() {
