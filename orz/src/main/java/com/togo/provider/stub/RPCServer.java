@@ -77,6 +77,7 @@ public class RPCServer {
      */
     public static void init() throws Exception {
 
+        log.info(Thread.currentThread().getStackTrace()[1].getClassName());
         String path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         String root = path;//URLDecoder.decode(, String.valueOf(Charset.defaultCharset()));
         log.info("start init");
