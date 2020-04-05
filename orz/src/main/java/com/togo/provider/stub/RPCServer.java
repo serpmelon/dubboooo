@@ -79,7 +79,6 @@ public class RPCServer {
 
         ConfigUtil.instance().init();
         Register.instance().init();
-        log.info(classPath());
         TwoTuples<String, String> twoTuples = ContextUtil.findRoot(classPath());
         ContextUtil.scanAndLoad(twoTuples);
         start();

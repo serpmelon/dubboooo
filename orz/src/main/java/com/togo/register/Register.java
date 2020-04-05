@@ -1,21 +1,24 @@
 package com.togo.register;
 
 import com.togo.util.ConfigUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Author taiyn
  * @Description 注册中心
  * @Date 9:58 下午 2020/3/23
  **/
+@Slf4j
 public class Register {
 
     private String root = "/orz";
     private ZooKeeper zooKeeper;
     private OrzRegisterWatcher watcher;
-    private String zkAddress = "127.0.0.1:2181";
     private int timeout;
 
     private String host;
@@ -39,12 +42,14 @@ public class Register {
     public void init() {
 
         ConfigUtil configUtil = ConfigUtil.instance();
-        host = configUtil.read("host");
-        port = configUtil.readInt("port");
+        host = configUtil.read("register.host");
+        port = configUtil.readInt("register.port");
         watcher = new OrzRegisterWatcher();
         timeout = 1000;
         try {
-            zooKeeper = new ZooKeeper(zkAddress, timeout, watcher);
+            log.info("register init...");
+            zooKeeper = new ZooKeeper(host + ":" + port, timeout, watcher);
+            log.info("register init end");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,5 +61,16 @@ public class Register {
 
     public void scan() {
 
+    }
+
+    public String select(String node) {
+
+        try {
+            byte[] data = zooKeeper.getData(node, null, null);
+            return new String(data, StandardCharsets.UTF_8);
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
