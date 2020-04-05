@@ -1,13 +1,9 @@
 package com.togo;
 
 
-import com.togo.context.Context;
+import com.togo.annotation.scan.ScanEnter;
 import com.togo.provider.stub.RPCServer;
-import com.togo.util.ContextUtil;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * <p></p>
@@ -24,6 +20,7 @@ import java.net.URL;
  * @since 1.0
  */
 @Slf4j
+@ScanEnter
 public class ServerApp {
 
     public static void main(String[] args) {
