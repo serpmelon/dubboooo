@@ -6,6 +6,7 @@ import com.togo.context.Context;
 import com.togo.message.Message;
 import com.togo.register.Register;
 import com.togo.util.ContextUtil;
+import com.togo.util.TwoTuples;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -77,10 +78,16 @@ public class RPCServer {
      */
     public static void init() throws Exception {
 
-        log.info(Thread.currentThread().getStackTrace()[1].getClassName());
-        String root = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        ContextUtil.scanAndLoad(root);
+        log.info(classPath());
+        TwoTuples<String, String> twoTuples = ContextUtil.findRoot(classPath());
+        ContextUtil.scanAndLoad(twoTuples);
         start();
+    }
+
+    private static String classPath() {
+
+        String s = Thread.currentThread().getStackTrace()[3].getClassName();
+        return Thread.currentThread().getStackTrace()[3].getClassName();
     }
 
     private static Object handleRequest(String msg) throws Exception {

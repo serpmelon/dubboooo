@@ -2,6 +2,7 @@ package com.togo.util;
 
 import com.togo.annotation.Orz;
 import com.togo.annotation.scan.Key;
+import com.togo.annotation.scan.ScanEnter;
 import com.togo.context.Context;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,8 +23,29 @@ import java.io.File;
  * @since 1.0
  */
 @Slf4j
-public class ContextUtil {
+public final class ContextUtil {
 
+    private ContextUtil(){}
+
+    public static TwoTuples<String, String> findRoot(String klassPath) {
+
+        try {
+            Class<?> klass = Class.forName(klassPath);
+            if (klass.isAnnotationPresent(ScanEnter.class)){
+
+                String root = klassPath.substring(0, klassPath.lastIndexOf(".")).replace(".", "/");
+                String fileRoot = Thread.currentThread().getContextClassLoader().getResource(root).getPath();
+                String dirRoot = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+                return TwoTuples.instance(fileRoot, dirRoot);
+            }
+        } catch (Exception e) {
+            log.error("found no class", e);
+        }
+
+        String root =Thread.currentThread().getContextClassLoader().getResource("").getPath();
+
+        return TwoTuples.instance(root, root);
+    }
     /**
      * <pre>
      * desc : 扫描全部类
@@ -33,11 +55,11 @@ public class ContextUtil {
      * @return java.util.Map<com.com.togo.annotation.scanAndLoad.Key, java.lang.Class>
      * </pre>
      */
-    public static void scanAndLoad(String root) {
+    public static void scanAndLoad(TwoTuples<String, String> twoTuples) {
 
         log.info("start scanAndLoad");
-        File file = new File(root);
-        scan(file, root);
+        File file = new File(twoTuples.first());
+        scan(file, twoTuples.second());
         loadImpl();
     }
 
