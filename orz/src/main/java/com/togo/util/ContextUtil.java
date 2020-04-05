@@ -39,7 +39,6 @@ public class ContextUtil {
         File file = new File(root);
         scan(file, root);
         loadImpl();
-        System.out.println(Context.INSTANCE.getAllFiles());
     }
 
     /**
