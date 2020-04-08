@@ -3,7 +3,6 @@ import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * @Author taiyn
