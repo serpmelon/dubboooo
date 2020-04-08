@@ -25,6 +25,12 @@ public class ZooMain implements Watcher {
         }
     }
 
+    /**
+     * 创建节点
+     *
+     * @param node
+     * @param data
+     */
     public void createNode(String node, byte[] data) {
         try {
             zooKeeper.create(node, data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
@@ -33,6 +39,12 @@ public class ZooMain implements Watcher {
         }
     }
 
+    /**
+     * 删除节点
+     *
+     * @param node
+     * @param version
+     */
     public void delete(String node, int version) {
 
         try {
@@ -42,6 +54,13 @@ public class ZooMain implements Watcher {
         }
     }
 
+    /**
+     * 更新节点
+     *
+     * @param node
+     * @param data
+     * @param version
+     */
     public void update(String node, byte[] data, int version) {
 
         try {
@@ -51,6 +70,12 @@ public class ZooMain implements Watcher {
         }
     }
 
+    /**
+     * 查询节点
+     *
+     * @param node
+     * @return
+     */
     public String select(String node) {
 
         try {
@@ -62,6 +87,12 @@ public class ZooMain implements Watcher {
         return null;
     }
 
+    /**
+     * 版本信息
+     *
+     * @param node
+     * @return
+     */
     public int version(String node) {
 
         try {
@@ -73,6 +104,13 @@ public class ZooMain implements Watcher {
         return -1;
     }
 
+    /**
+     * 检查是否存在
+     *
+     * @param node
+     * @param watch
+     * @return
+     */
     public boolean exists(String node, boolean watch) {
 
         try {
@@ -85,6 +123,19 @@ public class ZooMain implements Watcher {
         }
     }
 
+    /**
+     * 监听事件
+     *
+     * @param event
+     */
+    @Override
+    public void process(WatchedEvent event) {
+
+        if (event.getType() == Event.EventType.NodeDataChanged) { // 节点变换
+            System.out.println("changed");
+            System.out.println(select("/java"));
+        }
+    }
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -108,15 +159,6 @@ public class ZooMain implements Watcher {
 
             Thread.sleep(3000);
 
-        }
-    }
-
-    @Override
-    public void process(WatchedEvent event) {
-
-        if (event.getType() == Event.EventType.NodeDataChanged) {
-            System.out.println("changed");
-            System.out.println(select("/java"));
         }
     }
 }
