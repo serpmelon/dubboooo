@@ -12,14 +12,11 @@ import java.util.concurrent.CountDownLatch;
  **/
 public class ZooMain implements Watcher {
 
-    private static CountDownLatch countDownLatch = new CountDownLatch(1);
-
     private static ZooKeeper zooKeeper;
 
     public ZooMain(String host, int timeout) {
         try {
             zooKeeper = new ZooKeeper(host, timeout, this);
-//            zooKeeper.getData()
         } catch (IOException e) {
             e.printStackTrace();
         }
