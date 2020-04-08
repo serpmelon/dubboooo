@@ -19,7 +19,7 @@ public class Register {
     private String root = "/orz";
     private ZooKeeper zooKeeper;
     private OrzRegisterWatcher watcher;
-    private int timeout;
+    private int timeout = 1000;
 
     private String host;
     private int port;
@@ -45,7 +45,6 @@ public class Register {
         host = configUtil.read("register.host");
         port = configUtil.readInt("register.port");
         watcher = new OrzRegisterWatcher();
-        timeout = 1000;
         try {
             log.info("register init...");
             zooKeeper = new ZooKeeper(host + ":" + port, timeout, watcher);
@@ -73,4 +72,6 @@ public class Register {
         }
         return null;
     }
+
+
 }

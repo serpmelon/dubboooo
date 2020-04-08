@@ -1,7 +1,9 @@
 import org.apache.zookeeper.*;
+import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @Author taiyn
@@ -10,10 +12,14 @@ import java.nio.charset.StandardCharsets;
  **/
 public class ZooMain implements Watcher {
 
-    ZooKeeper zooKeeper;
+    private static CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    private static ZooKeeper zooKeeper;
+
     public ZooMain(String host, int timeout) {
         try {
-            this.zooKeeper = new ZooKeeper(host, timeout, this);
+            zooKeeper = new ZooKeeper(host, timeout, this);
+//            zooKeeper.getData()
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,9 +37,7 @@ public class ZooMain implements Watcher {
 
         try {
             zooKeeper.delete(node, version);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (KeeperException e) {
+        } catch (InterruptedException | KeeperException e) {
             e.printStackTrace();
         }
     }
@@ -42,9 +46,7 @@ public class ZooMain implements Watcher {
 
         try {
             zooKeeper.setData(node, data, version);
-        } catch (KeeperException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -52,7 +54,7 @@ public class ZooMain implements Watcher {
     public String select(String node) {
 
         try {
-            byte[] data = zooKeeper.getData(node, null, null);
+            byte[] data = zooKeeper.getData(node, this, null);
             return new String(data, StandardCharsets.UTF_8);
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
@@ -71,26 +73,50 @@ public class ZooMain implements Watcher {
         return -1;
     }
 
-    public static void main(String[] args) {
+    public boolean exists(String node, boolean watch) {
+
+        try {
+            Stat stat = zooKeeper.exists("/fff", watch);
+            return stat != null;
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+
+            throw new RuntimeException();
+        }
+    }
+
+
+    public static void main(String[] args) throws InterruptedException {
 
         String host = "127.0.0.1:2181";
-        ZooMain zooMain = new ZooMain(host, 1000);
+        ZooMain zooMain = new ZooMain(host, 15000);
 
-        String node = "/java/src";
-        zooMain.createNode(node, "wahaha".getBytes());
-        System.out.println(zooMain.select(node));
-        int version = zooMain.version(node);
-        System.out.println("v " + version);
-        zooMain.update(node, "heiheihei".getBytes(), version);
-        System.out.println(zooMain.select(node));
-        version = zooMain.version(node);
-        System.out.println("v " + version);
-        zooMain.delete(node, version);
-        System.out.println(zooMain.select(node));
+//        String node = "/java";
+//        if (zooMain.exists(node, true))
+//            zooMain.createNode(node, "wahaha".getBytes());
+//        System.out.println(zooMain.select(node));
+//        int version = zooMain.version(node);
+//        System.out.println("v " + version);
+//        zooMain.update(node, "heiheihei".getBytes(), version);
+//        System.out.println(zooMain.select(node));
+//        version = zooMain.version(node);
+//        System.out.println("v " + version);
+//        zooMain.delete(node, version);
+//        System.out.println(zooMain.select(node));
+        zooMain.select("/java");
+        while (true) {
+
+            Thread.sleep(3000);
+
+        }
     }
 
     @Override
     public void process(WatchedEvent event) {
 
+        if (event.getType() == Event.EventType.NodeDataChanged) {
+            System.out.println("changed");
+            System.out.println(select("/java"));
+        }
     }
 }
