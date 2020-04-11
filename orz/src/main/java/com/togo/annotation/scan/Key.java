@@ -20,7 +20,7 @@ import java.util.Objects;
 public class Key {
 
     private String name;
-    private String[] alias;
+    private String alias;
 
     public Key(String name) {
 
@@ -29,26 +29,23 @@ public class Key {
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Key key = (Key) o;
         return Objects.equals(name, key.name) &&
-                Arrays.equals(alias, key.alias);
+                Objects.equals(alias, key.alias);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(name);
-        result = 31 * result + Arrays.hashCode(alias);
-        return result;
+        return Objects.hash(name, alias);
     }
 
     @Override
     public String toString() {
         return "Key{" +
                 "name='" + name + '\'' +
-                ", alias=" + Arrays.toString(alias) +
+                ", alias='" + alias + '\'' +
                 '}';
     }
 
@@ -60,11 +57,11 @@ public class Key {
         this.name = name;
     }
 
-    public String[] getAlias() {
+    public String getAlias() {
         return alias;
     }
 
-    public void setAlias(String... alias) {
+    public void setAlias(String alias) {
         this.alias = alias;
     }
 }

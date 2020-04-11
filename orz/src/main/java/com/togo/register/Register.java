@@ -1,5 +1,7 @@
 package com.togo.register;
 
+import com.togo.annotation.scan.Key;
+import com.togo.context.ServiceContext;
 import com.togo.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
@@ -7,6 +9,7 @@ import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 /**
  * @Author taiyn
@@ -55,6 +58,8 @@ public class Register {
     }
 
     public void signIn() {
+
+        Map<Key, String> implMap = ServiceContext.INSTANCE.getAllServiceImpls();
 
     }
 

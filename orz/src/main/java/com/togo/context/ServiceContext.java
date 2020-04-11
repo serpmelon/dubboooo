@@ -58,6 +58,10 @@ public enum ServiceContext {
         return allServiceImpls.get(key);
     }
 
+    public Map<Key, String> getAllServiceImpls() {
+        return allServiceImpls;
+    }
+
     public List<String> getAllFiles() {
         return allFiles;
     }
