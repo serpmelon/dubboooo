@@ -35,14 +35,13 @@ import java.net.Socket;
 @Slf4j
 public class RPCServer {
 
-    private static void start() throws Exception {
+    public static final int port = 9024;
+
+    public static void start() throws Exception {
 
         String address = "127.0.0.1";
-        int port = 9024;
 
         log.info("server start address : [{}], port: [{}]", address, port);
-
-//        Register.INSTANCE.signIn();
 
         ServerSocket serverSocket = new ServerSocket();
         serverSocket.bind(new InetSocketAddress(address, port));
@@ -81,6 +80,7 @@ public class RPCServer {
         Register.instance().init();
         TwoTuples<String, String> twoTuples = ContextUtil.findRoot(classPath());
         ContextUtil.scanAndLoad(twoTuples);
+        Register.instance().signIn();
         start();
     }
 

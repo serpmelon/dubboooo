@@ -2,12 +2,15 @@ package com.togo.register;
 
 import com.togo.annotation.scan.Key;
 import com.togo.context.ServiceContext;
+import com.togo.provider.stub.RPCServer;
 import com.togo.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -21,24 +24,20 @@ public class Register {
 
     private String root = "/orz";
     private ZooKeeper zooKeeper;
-    private OrzRegisterWatcher watcher;
     private int timeout = 1000;
 
     private String host;
     private int port;
+    private OrzZooKeeper orzZooKeeper;
 
-    private static Register register;
+    private static Register register = new Register();
+    ;
 
     private Register() {
     }
 
-    // TODO taiyn 2020/3/30 重写单例模式
     public static Register instance() {
 
-        if (register != null)
-            return register;
-
-        register = new Register();
         return register;
     }
 
@@ -47,31 +46,45 @@ public class Register {
         ConfigUtil configUtil = ConfigUtil.instance();
         host = configUtil.read("register.host");
         port = configUtil.readInt("register.port");
-        watcher = new OrzRegisterWatcher();
-        try {
-            log.info("register init...");
-            zooKeeper = new ZooKeeper(host + ":" + port, timeout, watcher);
-            log.info("register init end");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        log.info("register init...");
+        orzZooKeeper = new OrzZooKeeper(host + ":" + port, timeout);
+        log.info("register init end");
     }
 
     public void signIn() {
 
         Map<Key, String> implMap = ServiceContext.INSTANCE.getAllServiceImpls();
+        if (orzZooKeeper.notExists(root, false)) {
+            orzZooKeeper.createNode(root);
+        }
 
+        implMap.forEach((k, v) -> {
+
+            orzZooKeeper.createDeepNode("", k.orzName(), ip() + ":" + RPCServer.port);
+        });
     }
 
     public void scan() {
 
     }
 
-    class ZooUtil implements Watcher {
+    private String ip() {
+
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            return addr.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        throw new RuntimeException("can not find local ip");
+    }
+
+    class OrzZooKeeper implements Watcher {
 
         private ZooKeeper zooKeeper;
 
-        public ZooUtil(String host, int timeout) {
+        OrzZooKeeper(String host, int timeout) {
             try {
                 zooKeeper = new ZooKeeper(host, timeout, this);
             } catch (IOException e) {
@@ -80,18 +93,52 @@ public class Register {
         }
 
         /**
-         * 创建节点
+         * create node
          *
-         * @param node
-         * @param data
+         * @param node just node
+         * @param data just data
          */
-        public void createNode(String node, byte[] data) {
+        private void createNode(String node, byte[] data) {
             try {
                 zooKeeper.create(node, data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+                log.info("create node: [{}]", node);
             } catch (KeeperException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
+        private void createNode(String node, String data) {
+            createNode(node, data.getBytes());
+        }
+
+        private void createNode(String node) {
+            createNode(node, "");
+        }
+
+        /**
+         * create multiple directory and set <code>data</code> to the deepest node,
+         * create with <code>null</code> data if any directory do not exist
+         *
+         * @param data  data
+         * @param nodes multiple node
+         */
+        private void createDeepNode(String data, String... nodes) {
+
+            if (nodes.length == 0)
+                return;
+
+            StringBuilder dir = new StringBuilder(root);
+            for (int i = 0; i < nodes.length - 1; i++) {
+                dir.append("/");
+                dir.append(nodes[i]);
+                existsOrCreate(dir.toString(), true);
+            }
+
+            dir.append("/");
+            dir.append(nodes[nodes.length - 1]);
+            createNode(dir.toString(), data);
+        }
+
 
         /**
          * 删除节点
@@ -99,7 +146,7 @@ public class Register {
          * @param node
          * @param version
          */
-        public void delete(String node, int version) {
+        private void delete(String node, int version) {
 
             try {
                 zooKeeper.delete(node, version);
@@ -115,7 +162,7 @@ public class Register {
          * @param data
          * @param version
          */
-        public void update(String node, byte[] data, int version) {
+        private void update(String node, byte[] data, int version) {
 
             try {
                 zooKeeper.setData(node, data, version);
@@ -130,7 +177,7 @@ public class Register {
          * @param node
          * @return
          */
-        public String select(String node) {
+        private String select(String node) {
 
             try {
                 byte[] data = zooKeeper.getData(node, this, null);
@@ -147,7 +194,7 @@ public class Register {
          * @param node
          * @return
          */
-        public int version(String node) {
+        private int version(String node) {
 
             try {
                 return zooKeeper.exists(node, true).getVersion();
@@ -165,16 +212,34 @@ public class Register {
          * @param watch
          * @return
          */
-        public boolean exists(String node, boolean watch) {
+        private boolean exists(String node, boolean watch) {
 
             try {
-                Stat stat = zooKeeper.exists("/fff", watch);
+                Stat stat = zooKeeper.exists(node, watch);
                 return stat != null;
             } catch (KeeperException | InterruptedException e) {
                 e.printStackTrace();
 
                 throw new RuntimeException();
             }
+        }
+
+        private boolean notExists(String node, boolean watch) {
+
+            return !exists(node, watch);
+        }
+
+        /**
+         * create node if the node do not exist. the data of node is nothing.
+         *
+         * @param node
+         * @param watch
+         * @return
+         */
+        private void existsOrCreate(String node, boolean watch) {
+
+            if (!exists(node, watch))
+                createNode(node, "");
         }
 
         /**

@@ -36,7 +36,7 @@ public final class ConfigUtil {
     public void init() {
 
         properties = new Properties();
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("application.properties");
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(configName);
         if (inputStream != null) {
             try {
                 properties.load(inputStream);

@@ -49,6 +49,10 @@ public class Key {
                 '}';
     }
 
+    public String orzName() {
+        return name + "-orz-" + alias;
+    }
+
     public String getName() {
         return name;
     }

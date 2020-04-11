@@ -2,6 +2,8 @@ import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import java.util.List;
 public class ZooMain implements Watcher {
 
     private static ZooKeeper zooKeeper;
+    private String root = "/orz";
 
     public ZooMain(String host, int timeout) {
         try {
@@ -111,7 +114,7 @@ public class ZooMain implements Watcher {
     public boolean exists(String node, boolean watch) {
 
         try {
-            Stat stat = zooKeeper.exists("/fff", watch);
+            Stat stat = zooKeeper.exists(node, watch);
             return stat != null;
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
@@ -131,6 +134,46 @@ public class ZooMain implements Watcher {
         return null;
     }
 
+    /**
+     * create node if the node do not exist. the data of node is nothing.
+     *
+     * @param node
+     * @param watch
+     * @return
+     */
+    public void existsOrCreate(String node, boolean watch) {
+
+        if (!exists(node, watch))
+            createNode(node, "");
+    }
+
+    public void createNode(String node, String data) {
+        createNode(node, data.getBytes());
+    }
+
+    /**
+     * create multiple directory and set <code>data</code> to the deepest node,
+     * create with <code>null</code> data if any directory do not exist
+     *
+     * @param data data
+     * @param nodes multiple node
+     */
+    public void createDeepNode(String data, String... nodes) {
+
+        if (nodes.length == 0)
+            return;
+
+        StringBuilder dir = new StringBuilder("/javas");
+        for (int i = 0; i < nodes.length - 1; i++) {
+            dir.append("/");
+            dir.append(nodes[i]);
+            existsOrCreate(dir.toString(), true);
+        }
+
+        dir.append("/");
+        dir.append(nodes[nodes.length - 1]);
+        createNode(dir.toString(), data);
+    }
     /**
      * 监听事件
      *
@@ -154,31 +197,37 @@ public class ZooMain implements Watcher {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, UnknownHostException {
 
-        String host = "127.0.0.1:2181";
-        ZooMain zooMain = new ZooMain(host, 15000);
+        InetAddress addr = InetAddress.getLocalHost();
+        System.out.println("Local HostAddress: "+addr.getHostAddress());
+                String hostname = addr.getHostName();
+        System.out.println("Local host name: "+hostname);
 
-        String node = "/javas";
-        if (zooMain.exists(node, true))
-            System.out.println(123);
-        else
-            System.out.println(456);
-        System.out.println(zooMain.selectChildren(node));
-//            zooMain.createNode(node, "wahaha".getBytes());
-//        System.out.println(zooMain.select(node));
-//        int version = zooMain.version(node);
-//        System.out.println("v " + version);
-//        zooMain.update(node, "heiheihei".getBytes(), version);
-//        System.out.println(zooMain.select(node));
-//        version = zooMain.version(node);
-//        System.out.println("v " + version);
-//        zooMain.delete(node, version);
-//        System.out.println(zooMain.select(node));
-        zooMain.select("/");
-        while (true) {
-
-            Thread.sleep(3000);
-        }
+//        String host = "127.0.0.1:2181";
+//        ZooMain zooMain = new ZooMain(host, 15000);
+//
+//        String node = "/javas";
+//        if (zooMain.exists(node, true))
+//            System.out.println(123);
+//        else
+//            System.out.println(456);
+//        System.out.println(zooMain.selectChildren(node));
+////            zooMain.createNode(node, "wahaha".getBytes());
+////        System.out.println(zooMain.select(node));
+////        int version = zooMain.version(node);
+////        System.out.println("v " + version);
+////        zooMain.update(node, "heiheihei".getBytes(), version);
+////        System.out.println(zooMain.select(node));
+////        version = zooMain.version(node);
+////        System.out.println("v " + version);
+////        zooMain.delete(node, version);
+////        System.out.println(zooMain.select(node));
+//        zooMain.select("/");
+//        zooMain.createDeepNode("deep", "one", "two", "three", "target");
+//        while (true) {
+//
+//            Thread.sleep(3000);
+//        }
     }
 }
