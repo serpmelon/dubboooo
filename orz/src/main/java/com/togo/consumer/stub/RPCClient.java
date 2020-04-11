@@ -3,6 +3,7 @@ package com.togo.consumer.stub;
 import com.togo.annotation.scan.Key;
 import com.togo.register.Register;
 import com.togo.register.ServiceAddress;
+import com.togo.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -35,12 +36,26 @@ public class RPCClient {
 
     private static RPCClient client = new RPCClient();
 
-    public static RPCClient instance(){
+    private boolean initOk = false;
+
+    public static RPCClient instance() {
         return client;
+    }
+
+    public void init() {
+
+        if (initOk)
+            return;
+
+        ConfigUtil.instance().init();
+        Register.instance().init();
+
+        initOk = true;
     }
 
     /**
      * ont time function
+     *
      * @param msg
      * @return
      * @throws IOException

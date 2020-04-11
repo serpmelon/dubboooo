@@ -2,7 +2,7 @@ package com.togo.util;
 
 import com.togo.annotation.OrzService;
 import com.togo.annotation.scan.Key;
-import com.togo.annotation.scan.ScanEnter;
+import com.togo.annotation.scan.OrzServer;
 import com.togo.context.ServiceContext;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +31,7 @@ public final class ContextUtil {
 
         try {
             Class<?> klass = Class.forName(klassPath);
-            if (klass.isAnnotationPresent(ScanEnter.class)){
+            if (klass.isAnnotationPresent(OrzServer.class)){
 
                 String root = klassPath.substring(0, klassPath.lastIndexOf(".")).replace(".", "/");
                 String fileRoot = Thread.currentThread().getContextClassLoader().getResource(root).getPath();

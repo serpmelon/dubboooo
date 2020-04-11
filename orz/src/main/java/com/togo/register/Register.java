@@ -5,6 +5,7 @@ import com.togo.context.ServiceContext;
 import com.togo.provider.stub.RPCServer;
 import com.togo.util.CollectionUtil;
 import com.togo.util.ConfigUtil;
+import com.togo.util.NetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
@@ -62,7 +63,7 @@ public class Register {
 
         implMap.forEach((k, v) -> {
 
-            orzZooKeeper.createDeepNode("", k.orzName(), ip() + ":" + RPCServer.port);
+            orzZooKeeper.createDeepNode("", k.orzName(), NetUtil.localIP() + ":" + RPCServer.port);
         });
     }
 
@@ -82,18 +83,6 @@ public class Register {
 
         String[] address = children.get(0).split(":");
         return new ServiceAddress(address[0], Integer.parseInt(address[1]));
-    }
-
-    private String ip() {
-
-        try {
-            InetAddress addr = InetAddress.getLocalHost();
-            return addr.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        throw new RuntimeException("can not find local ip");
     }
 
     class OrzZooKeeper implements Watcher {

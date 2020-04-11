@@ -7,6 +7,7 @@ import com.togo.message.Message;
 import com.togo.register.Register;
 import com.togo.util.ConfigUtil;
 import com.togo.util.ContextUtil;
+import com.togo.util.NetUtil;
 import com.togo.util.TwoTuples;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,7 +40,7 @@ public class RPCServer {
 
     public static void start() throws Exception {
 
-        String address = "127.0.0.1";
+        String address = NetUtil.localIP();
 
         log.info("server start address : [{}], port: [{}]", address, port);
 

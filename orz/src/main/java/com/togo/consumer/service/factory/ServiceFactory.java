@@ -1,6 +1,7 @@
 package com.togo.consumer.service.factory;
 
 import com.togo.consumer.service.proxy.RemoteProxy;
+import com.togo.consumer.stub.RPCClient;
 
 import java.lang.reflect.Proxy;
 
@@ -22,6 +23,8 @@ public class ServiceFactory {
 
     @SuppressWarnings("unchecked")
     public static <T> T createService(Class<T> klass, String alias) {
+
+        RPCClient.instance().init();
 
         if (klass == null)
             return null;
