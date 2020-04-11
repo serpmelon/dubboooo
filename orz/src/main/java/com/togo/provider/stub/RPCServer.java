@@ -76,12 +76,19 @@ public class RPCServer {
      */
     public static void init() throws Exception {
 
+        log.info("PRC server init...");
+        // config init
         ConfigUtil.instance().init();
+        // register init
         Register.instance().init();
         TwoTuples<String, String> twoTuples = ContextUtil.findRoot(classPath());
+        // scan service implement
         ContextUtil.scanAndLoad(twoTuples);
+        // register sign in service
         Register.instance().signIn();
         start();
+
+        log.info("PRC server init end...");
     }
 
     private static String classPath() {
