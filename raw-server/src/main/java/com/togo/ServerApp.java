@@ -1,7 +1,7 @@
 package com.togo;
 
 
-import com.togo.annotation.scan.ScanEnter;
+import com.togo.annotation.scan.OrzServer;
 import com.togo.provider.stub.RPCServer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 1.0
  */
 @Slf4j
-@ScanEnter
+@OrzServer
 public class ServerApp {
 
     public static void main(String[] args) {
