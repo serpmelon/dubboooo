@@ -1,6 +1,6 @@
 package com.togo.util;
 
-import com.togo.annotation.Orz;
+import com.togo.annotation.OrzService;
 import com.togo.annotation.scan.Key;
 import com.togo.annotation.scan.ScanEnter;
 import com.togo.context.ServiceContext;
@@ -129,15 +129,15 @@ public final class ContextUtil {
 
             try {
                 Class<?> klass = Class.forName(path);
-                if (klass.isAnnotationPresent(Orz.class)) {
+                if (klass.isAnnotationPresent(OrzService.class)) {
                     Class<?>[] interfaces = klass.getInterfaces();
                     for (Class<?> c : interfaces) {
 
                         Key key = new Key(c.getName());
-                        Orz orz = klass.getDeclaredAnnotation(Orz.class);
-                        if (StringUtil.isNotEmpty(orz.name())) {
+                        OrzService orzService = klass.getDeclaredAnnotation(OrzService.class);
+                        if (StringUtil.isNotEmpty(orzService.name())) {
 
-                            key.setAlias(orz.name());
+                            key.setAlias(orzService.name());
                         }
                         ServiceContext.INSTANCE.addServiceImpl(key, path);
                     }

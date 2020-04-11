@@ -34,7 +34,6 @@ public class Register {
     private OrzZooKeeper orzZooKeeper;
 
     private static Register register = new Register();
-    ;
 
     private Register() {
     }

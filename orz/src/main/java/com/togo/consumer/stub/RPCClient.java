@@ -39,24 +39,6 @@ public class RPCClient {
         return client;
     }
 
-    static {
-
-        try {
-            start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void start() throws Exception {
-
-        String address = "127.0.0.1";
-        int port = 9024;
-
-
-        log.info("客户端启动: \t\n");
-    }
-
     /**
      * ont time function
      * @param msg
@@ -83,7 +65,7 @@ public class RPCClient {
 
         ServiceAddress address = Register.instance().scan(key);
         //创建一个流套接字并将其连接到指定主机上的指定端口号
-        Socket socket = null;
+        Socket socket;
         try {
             socket = new Socket(address.getHost(), address.getPort());
             //读取服务器端数据
