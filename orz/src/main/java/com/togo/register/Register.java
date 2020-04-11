@@ -3,6 +3,7 @@ package com.togo.register;
 import com.togo.annotation.scan.Key;
 import com.togo.context.ServiceContext;
 import com.togo.provider.stub.RPCServer;
+import com.togo.util.CollectionUtil;
 import com.togo.util.ConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.*;
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,8 +67,22 @@ public class Register {
         });
     }
 
-    public void scan() {
+    public ServiceAddress scan(Key key) {
 
+        String node = root + "/" + key.orzName();
+
+        List<String> children = orzZooKeeper.selectChildren(node);
+
+        return loadStrategy(children);
+    }
+
+    private ServiceAddress loadStrategy(List<String> children) {
+
+        if (CollectionUtil.isEmpty(children))
+            throw new IllegalArgumentException();
+
+        String[] address = children.get(0).split(":");
+        return new ServiceAddress(address[0], Integer.parseInt(address[1]));
     }
 
     private String ip() {
@@ -136,9 +153,9 @@ public class Register {
 
             dir.append("/");
             dir.append(nodes[nodes.length - 1]);
-            createNode(dir.toString(), data);
-        }
 
+            existsOrCreate(dir.toString(), true, data);
+        }
 
         /**
          * 删除节点
@@ -238,8 +255,24 @@ public class Register {
          */
         private void existsOrCreate(String node, boolean watch) {
 
+            existsOrCreate(node, watch, "");
+        }
+
+        private void existsOrCreate(String node, boolean watch, String data) {
+
             if (!exists(node, watch))
-                createNode(node, "");
+                createNode(node, data);
+        }
+
+        public List<String> selectChildren(String node) {
+
+            try {
+                return zooKeeper.getChildren(node, this);
+            } catch (KeeperException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return null;
         }
 
         /**

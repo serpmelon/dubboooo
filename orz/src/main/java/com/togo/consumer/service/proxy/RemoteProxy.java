@@ -1,6 +1,7 @@
 package com.togo.consumer.service.proxy;
 
 import com.alibaba.fastjson.JSONObject;
+import com.togo.annotation.scan.Key;
 import com.togo.consumer.stub.RPCClient;
 import com.togo.message.Message;
 
@@ -41,6 +42,9 @@ public class RemoteProxy<T> implements InvocationHandler {
         message.setParameterKlassNameArrays(method.getParameterTypes());
         message.setParameterArrays(args);
 
-        return RPCClient.sendMsg(JSONObject.toJSONString(message));
+        Key key = new Key(klass.getName());
+        key.setAlias(alias);
+
+        return RPCClient.instance().sendMsg(JSONObject.toJSONString(message), key);
     }
 }
