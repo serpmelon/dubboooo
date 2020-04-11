@@ -25,14 +25,14 @@ import java.util.Map;
  * @since 1.0
  */
 @Slf4j
-public enum Context {
+public enum ServiceContext {
 
     INSTANCE;
 
     private List<String> allFiles;
     private Map<Key, String> allServiceImpls;
 
-    Context(){
+    ServiceContext(){
         allFiles = new ArrayList<>();
         allServiceImpls = new HashMap<>();
     }

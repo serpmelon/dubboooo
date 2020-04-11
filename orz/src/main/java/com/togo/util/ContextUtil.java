@@ -3,7 +3,7 @@ package com.togo.util;
 import com.togo.annotation.Orz;
 import com.togo.annotation.scan.Key;
 import com.togo.annotation.scan.ScanEnter;
-import com.togo.context.Context;
+import com.togo.context.ServiceContext;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -110,7 +110,7 @@ public final class ContextUtil {
         path = path.substring(root.length());
         path = path.replace('/', '.');
 
-        Context.INSTANCE.addFile(path.substring(0, path.length() - ".class".length()));
+        ServiceContext.INSTANCE.addFile(path.substring(0, path.length() - ".class".length()));
     }
 
 
@@ -125,7 +125,7 @@ public final class ContextUtil {
      */
     private static void loadImpl() {
 
-        for (String path : Context.INSTANCE.getAllFiles()) {
+        for (String path : ServiceContext.INSTANCE.getAllFiles()) {
 
             try {
                 Class<?> klass = Class.forName(path);
@@ -139,7 +139,7 @@ public final class ContextUtil {
 
                             key.setAlias(orz.name());
                         }
-                        Context.INSTANCE.addServiceImpl(key, path);
+                        ServiceContext.INSTANCE.addServiceImpl(key, path);
                     }
                 }
             } catch (ClassNotFoundException e) {

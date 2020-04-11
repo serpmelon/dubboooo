@@ -2,7 +2,7 @@ package com.togo.provider.stub;
 
 import com.alibaba.fastjson.JSONObject;
 import com.togo.annotation.scan.Key;
-import com.togo.context.Context;
+import com.togo.context.ServiceContext;
 import com.togo.message.Message;
 import com.togo.register.Register;
 import com.togo.util.ConfigUtil;
@@ -97,7 +97,7 @@ public class RPCServer {
 
         Key key = new Key(klassName);
         key.setAlias(message.getAlias());
-        klassName = Context.INSTANCE.getServiceImpl(key);
+        klassName = ServiceContext.INSTANCE.getServiceImpl(key);
         Class klass = Class.forName(klassName);
         Class[] param = message.getParameterKlassNameArrays();
         Method method = klass.getMethod(message.getMethodName(), param);

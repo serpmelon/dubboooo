@@ -3,6 +3,7 @@ import org.apache.zookeeper.data.Stat;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * @Author taiyn
@@ -119,6 +120,17 @@ public class ZooMain implements Watcher {
         }
     }
 
+    public List<String> selectChildren(String node) {
+
+        try {
+            return zooKeeper.getChildren(node, this);
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     /**
      * 监听事件
      *
@@ -131,6 +143,15 @@ public class ZooMain implements Watcher {
             System.out.println("changed");
             System.out.println(select("/java"));
         }
+        if (event.getType() == Event.EventType.NodeCreated) {
+            System.out.println("create");
+            select("/");
+        }
+        if (event.getType() == Event.EventType.NodeChildrenChanged) {
+            System.out.println("children");
+            System.out.println(event.getPath());
+            select("/");
+        }
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -138,8 +159,12 @@ public class ZooMain implements Watcher {
         String host = "127.0.0.1:2181";
         ZooMain zooMain = new ZooMain(host, 15000);
 
-//        String node = "/java";
-//        if (zooMain.exists(node, true))
+        String node = "/javas";
+        if (zooMain.exists(node, true))
+            System.out.println(123);
+        else
+            System.out.println(456);
+        System.out.println(zooMain.selectChildren(node));
 //            zooMain.createNode(node, "wahaha".getBytes());
 //        System.out.println(zooMain.select(node));
 //        int version = zooMain.version(node);
@@ -150,11 +175,10 @@ public class ZooMain implements Watcher {
 //        System.out.println("v " + version);
 //        zooMain.delete(node, version);
 //        System.out.println(zooMain.select(node));
-        zooMain.select("/java");
+        zooMain.select("/");
         while (true) {
 
             Thread.sleep(3000);
-
         }
     }
 }
